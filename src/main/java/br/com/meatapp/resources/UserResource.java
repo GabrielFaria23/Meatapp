@@ -73,9 +73,21 @@ public class UserResource {
 				.path("/id/{id}")
 				.buildAndExpand(user.getId())
 				.toUri();
+				//criando URI
 		return ResponseEntity.created(uri).body(user);
 		//a linha de coma constroi um caminho para acessar o novo usuario criado, sempre
 		// que inserir algo (utilizar o POST) tem que fazer isso 
+	}
+	
+	@RequestMapping(value = "id/{id}",method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody  User user){		
+		user = userService.update(user,id);
+		return ResponseEntity.noContent().build();
+	}
+	@RequestMapping(value = "id/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id){
+		userService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 }
