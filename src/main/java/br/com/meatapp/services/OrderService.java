@@ -43,13 +43,15 @@ public class OrderService {
 		}
 		
 		public Orders insert(Orders order) {
+			List <OrderItem> items = order.getOrderItems();
+			
 			order.setId(null);
 			order.setData(LocalDateTime.now());
 			order.setUser(userService.findByID(order.getUser().getId()));
 			order.setRestaurant(restaurantService.findByID(order.getRestaurant().getId()));
+			order.setOrderItems(null);
 			order = orderRepository.save(order);
 			
-			List <OrderItem> items = order.getOrderItems();
 			int item = 1;
 			for (OrderItem it: items) {
 				it.setOrders(order);
@@ -59,7 +61,7 @@ public class OrderService {
 				orderItemRepository.save(it);
 				item ++;
 			}
-			
+			order.setOrderItems(items);
 			return order;
 		}
 		
